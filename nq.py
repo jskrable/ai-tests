@@ -5,6 +5,7 @@
 
 import sys
 import cProfile
+
 def safe(board,col):
 	# loop thru previous columns
 	for i in range(col):
@@ -34,9 +35,18 @@ def solve(board,col,n):
 					return True
 		return False
 
-def display(solution):
-	for row in solution:
+def display(board):
+	row = ''
+	print()
+	for col in board:
+		for i in range(len(board)):
+			if i == col:
+				row += 'Q|' 
+			else:
+				row += '_|'
 		print(row)
+		row = ''
+	print()
 
 def main():
 
@@ -45,12 +55,12 @@ def main():
 	N = n
 
 	board = [-1]*n
-	solution = [[0]*n for i in range(n)]
+	#solution = [[0]*n for i in range(n)]
 	solve(board,0,n)
-
 	print(board)
+	display(board)
 
-	#display(board)
+	
 
 if __name__ == "__main__":
 	cProfile.run('main()')
