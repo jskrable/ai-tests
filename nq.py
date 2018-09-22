@@ -36,31 +36,42 @@ def solve(board,col,n):
 		return False
 
 def display(board):
+	# init row string
 	row = ''
+	# spacer row
 	print()
+	# loop thru columns
 	for col in board:
+		# loop thru rows
 		for i in range(len(board)):
 			if i == col:
+				# place queen
 				row += 'Q|' 
 			else:
+				# empty square
 				row += '_|'
+		# print row
 		print(row)
+		# empty row string for next loop
 		row = ''
+	# end spacer row
 	print()
 
 def main():
 
+	# get n from cmd line arg
 	n = int(sys.argv[1])
 
-	N = n
-
+	# init board
 	board = [-1]*n
 	#solution = [[0]*n for i in range(n)]
+	# solve for n
 	solve(board,0,n)
+	# print solution
 	print(board)
+	# display solution board
 	display(board)
 
-	
-
 if __name__ == "__main__":
+	# profile stats on run
 	cProfile.run('main()')
