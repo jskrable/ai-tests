@@ -43,19 +43,18 @@ def display(board):
 
 # function to evaluate board
 def eval(board):
-	# check all win positions for a complete row
-	if ((board[7] == board[8] == board [9]) or
-		(board[4] == board[5] == board [6]) or
-		(board[1] == board[2] == board [3]) or 
-		(board[1] == board[4] == board [7]) or 
-		(board[2] == board[5] == board [8]) or
-		(board[3] == board[6] == board [9]) or
-		(board[7] == board[5] == board [3]) or 
-		(board[1] == board[5] == board [9])):
-		return 1
-	# if none return draw
-	else:
-		return 0
+	# list of win scenarios
+	win_conditions = [(1,2,3),(4,5,6),(7,8,9),(1,4,7),
+		(2,5,8),(3,6,9),(1,5,9),(3,5,7)]
+	# init win
+	win = 0
+	# loop thru win conditions
+	for x,y,z in win_conditions:
+		# if three in a row win
+		if board[x]==board[y]==board[z]:
+			win = 1
+
+	return win
 
 def main():
 
