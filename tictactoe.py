@@ -6,16 +6,25 @@
 import random
 
 # function to randomly populate a complete board
-def pop(board):
+def pop(board,full):
 
-	# loop thru columns
-	for i in range(len(board)):
-		# random populate positions
-		if random.randint(1,2) > 1:
-			board[i] = 1
-		else: 
-			board[i] = 0
-	return board
+	# populate board completely
+	if full:
+		for i in range(len(board)):
+			if random.randint(1,2) > 1:
+				board[i] = 1
+			else: 
+				board[i] = 0
+		return board
+	# populate a partial board
+	else:
+		for i in range(random.randint(1,len(board))):
+			if i%2 == 0:
+				board[i] = 1
+			else: 
+				board[i] = 0
+		return board
+
 
 # function to display board
 def display(board):
@@ -51,7 +60,7 @@ def eval(board):
 	# loop thru win conditions
 	for x,y,z in win_conditions:
 		# if three in a row win
-		if board[x]==board[y]==board[z]:
+		if board[x]==board[y]==board[z]!=-1:
 			win = 1
 
 	return win
@@ -60,8 +69,8 @@ def main():
 
 	# create empty board
 	board = [-1]*10
-	# random full board
-	pop(board)
+	# random partial board
+	pop(board,False)
 	# display board
 	display(board)
 	#print(board)
