@@ -54,6 +54,7 @@ def display(board):
 		print(row)
 		# empty row string for next loop
 		row = ''
+		
 	# end spacer row
 	print()
 
