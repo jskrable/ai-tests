@@ -32,52 +32,74 @@ mini			if i%2 == 0:
 		return board
 """
 
+# function to run full game
+# FAILING
+# alter to catch wins or draws
 def run(board,first):
 	while not end(board):
 		if win(board) != 0:
 			print("WINNER ", + str(win(board)))
-			
+
 		bestMove(board,first)
 	return board
 
 # minimax function
 def minimax(board,depth,player):
 
+	# init leaf counter
 	nodes = 0
 
+	# set best by player
 	if player == -1:
 		best = +inf
 	else:
 		best = -inf
 
+	# catch terminal states
 	if end(board):
+		# CHANGE WHAT RETURNS HERE
 		return win(board)
 
+	# run through squares
 	for i in range(1,len(board)):
+		# check if empty
 		if board[i] == 0:
+			# try to play
 			board[i] = player
+			# get best possible play using recursion
 			best = max(minimax(board,depth+1,-player))
+			# take back play
 			board[i] = 0
 		"""
 		value = minimax(board,depth+1,-player)
 		best = max(best,value)
 		"""
+	# return best possible play
 	return best
 
+# function that returns best move by player
 def bestMove(board,player):
+	# init vars
 	best_value = -inf
 	best_move = -1
 
+	# loop through squares
 	for i in range(1,len(board)):
+		# if empty
 		if board[i] == 0:
+			# make move
 			board[i] = player
+			# get best possible value of move
 			move_value = minimax(board,0,player)
+			# take move back
 			board[i] = 0
 
+			# set best move
 			if move_value > best_value:
 				best_move = i
 				best_value = move_value
 
+	# display value of best move
 	print("The value of the best move is: " + str(best_move))
 	return best_move
 
@@ -125,20 +147,30 @@ def reset():
 
 # function to determine win state
 def win(board):
+	# init win var
 	win = 0
+	# loop thru possible wins
 	for x,y,z in win_conditions:
 		if board[x]==board[y]==board[z]!=0:
+			# set win to winning player
 			win = board[x]
 	return win
 
+# function to check for a push
 def draw(board):
+	# init empty var
 	empty = False
+	# loop thru squares
 	for i in range(1,len(board)):
 			if board[i] == 0:
+				# update var if any are empty
 				empty = True
+	# return true for no empty squares
 	return not empty
 
+# function to check for terminal state
 def end(board):
+	# check if win or draw
 	return win(board) != 0 or draw(board)
 				
 
