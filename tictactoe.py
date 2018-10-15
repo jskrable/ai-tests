@@ -39,7 +39,7 @@ def run(board,first):
 	while not end(board):
 		if win(board) != 0:
 			print("WINNER ", + str(win(board)))
-
+			break
 		bestMove(board,first)
 	return board
 
@@ -47,18 +47,18 @@ def run(board,first):
 def minimax(board,depth,player):
 
 	# init leaf counter
-	nodes = 0
-
-	# set best by player
-	if player == -1:
-		best = +inf
-	else:
-		best = -inf
+	#nodes = 0
+	best_move = 0
 
 	# catch terminal states
 	if end(board):
 		# CHANGE WHAT RETURNS HERE
-		return win(board)
+		return win(board)*10
+	# set best by player
+	elif player == -1:
+		best_score = +inf
+	else:
+		best_score = -inf
 
 	# run through squares
 	for i in range(1,len(board)):
@@ -67,7 +67,16 @@ def minimax(board,depth,player):
 			# try to play
 			board[i] = player
 			# get best possible play using recursion
-			best = max(minimax(board,depth+1,-player))
+			value = minimax(board,depth+1,-player)
+			if player == -1:
+				if best_score < :
+					best_move = i
+				best_score = min(best_score,value)
+
+			elif player == 1:
+				if best_score > value:
+					best_move = i
+				best_score = max(best_score,value)
 			# take back play
 			board[i] = 0
 		"""
@@ -75,29 +84,49 @@ def minimax(board,depth,player):
 		best = max(best,value)
 		"""
 	# return best possible play
-	return best
+	return best_score, best_move
 
 # function that returns best move by player
 def bestMove(board,player):
-	# init vars
-	best_value = -inf
-	best_move = -1
 
-	# loop through squares
-	for i in range(1,len(board)):
-		# if empty
-		if board[i] == 0:
-			# make move
-			board[i] = player
-			# get best possible value of move
-			move_value = minimax(board,0,player)
-			# take move back
-			board[i] = 0
 
-			# set best move
-			if move_value > best_value:
-				best_move = i
-				best_value = move_value
+	if player == 1:
+		# init vars
+		best_value = -1000
+
+		# loop through squares
+		for i in range(1,len(board)):
+			# if empty
+			if board[i] == 0:
+				# make move
+				board[i] = player
+				# get best possible value of move
+				move_value = minimax(board,0,1)
+				# take move back
+				board[i] = 0
+
+				# set best move
+				if move_value > best_value:
+					best_move = i
+					best_value = move_value
+	else:
+		best_value = 1000
+		# loop through squares
+		for i in range(1,len(board)):
+
+			# if empty
+			if board[i] == 0:
+				# make move
+				board[i] = player
+				# get best possible value of move
+				move_value = minimax(board,0,-1)
+				# take move back
+				board[i] = 0
+
+				# set best move
+				if move_value < best_value:
+					best_move = i
+					best_value = move_value
 
 	# display value of best move
 	print("The value of the best move is: " + str(best_move))
@@ -154,6 +183,7 @@ def win(board):
 		if board[x]==board[y]==board[z]!=0:
 			# set win to winning player
 			win = board[x]
+			break
 	return win
 
 # function to check for a push
@@ -165,6 +195,7 @@ def draw(board):
 			if board[i] == 0:
 				# update var if any are empty
 				empty = True
+				break
 	# return true for no empty squares
 	return not empty
 
@@ -203,11 +234,13 @@ def state(board):
 def main():
 
 	# create empty board
-	board = [-1]*10
+	board = [0]*10
 	# random partial board
 	#pop(board,False)
 	# display board
 	display(board)
+
+	run(board,1)
 	#print(board)
 	# print results of eval
 	# 0 for draw 1 for win
