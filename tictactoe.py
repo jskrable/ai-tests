@@ -69,12 +69,12 @@ def minimax(board,depth,player):
 			# get best possible play using recursion
 			value = minimax(board,depth+1,-player)
 			if player == -1:
-				if best_score < :
+				if value < best_score:
 					best_move = i
 				best_score = min(best_score,value)
 
 			elif player == 1:
-				if best_score > value:
+				if value > best_score:
 					best_move = i
 				best_score = max(best_score,value)
 			# take back play
