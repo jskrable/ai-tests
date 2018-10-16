@@ -1,10 +1,13 @@
-# tictactoe.py
-# author: Jack Skrable
-# date: 10/03/2018
-# desc: evaluates positions in a tictactoe game
-
+"""
+ tictactoe.py
+ author: Jack Skrable
+ date: 10/03/2018
+ desc: pits two AI players against each other in a game of tictactoe
+ 	   implemented using minimax algorithm with alpha beta pruning
+"""
 import random
 from math import inf
+import cProfile
 
 # list of win scenarios
 win_conditions = [(1,2,3),(4,5,6),(7,8,9),(1,4,7),
@@ -28,7 +31,7 @@ def run(board,player):
 		run(board,-player)
 
 # minimax function
-def minimax(board,depth,player,leafcnt):
+def minimax(board,depth,player):
 
 	# catch terminal states
 	if end(board):
@@ -121,7 +124,7 @@ def bestMove(board,player):
 			# make move
 			board[i] = player
 			# get best possible value of move
-			move_value = minimax(board,0,-player)
+			move_value = minimaxPrune(board,0,-player,-inf,+inf)
 			# take move back
 			board[i] = 0
 
@@ -261,4 +264,4 @@ def main():
 	run(board,1)
 
 if __name__ == "__main__":
-	main()
+	cProfile.run('main()')
