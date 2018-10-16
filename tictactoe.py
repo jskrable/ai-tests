@@ -30,15 +30,13 @@ def run(board,player):
 # minimax function
 def minimax(board,depth,player,leafcnt):
 
-	# init leaf counter
-	#nodes = 0
-
 	# catch terminal states
 	if end(board):
 		# return scores for end
 		# 10 for X win
 		# -10 for O win
 		# 0 for draw
+		leafcnt+=1
 		return win(board)*10
 	# set endpoint bests by player
 	elif player == 1:
@@ -66,48 +64,50 @@ def minimax(board,depth,player,leafcnt):
 	# return best score possible
 	return best_score
 
+# minimax function
+def minimaxPrune(board,depth,player,alpha,beta):
+
+	# catch terminal states
+	if end(board):
+		# return scores for end
+		# 10 for X win
+		# -10 for O win
+		# 0 for draw
+		return win(board)*10
+	# set endpoint bests by player
+	elif player == 1:
+		best_score = -inf
+	else:
+		best_score = +inf
+
+	# run through squares
+	for i in range(1,len(board)):
+		# check if empty
+		if board[i] == 0:
+			# try to play
+			board[i] = player
+			# get best possible value of play using recursion
+			# ALTER THIS TO TAKE DEPTH INTO ACCOUNT
+			# value = value - depth??
+			value = minimaxPrune(board,depth+1,-player,alpha,beta) - (player*depth)
+			# set best score by player
+			if player == 1:
+				best_score = max(best_score,value)
+				alpha = max(alpha,best_score)
+			else:
+				best_score = min(best_score,value)
+				beta = min(beta,best_score)
+			# take back play
+			board[i] = 0
+			# prune that thing
+			if beta <= alpha:
+					break
+	# return best score possible
+	return best_score
+
 # function that returns best move by player
 def bestMove(board,player):
 
-	"""
-	if player == 1:
-		# init vars
-		best_value = -inf
-
-		# loop through squares
-		for i in range(1,len(board)):
-			# if empty
-			if board[i] == 0:
-				# make move
-				board[i] = player
-				# get best possible value of move
-				move_value = minimax(board,0,-1)
-				# take move back
-				board[i] = 0
-
-				# set best move
-				if move_value > best_value:
-					best_move = i
-					best_value = move_value
-	else:
-		best_value = +inf
-		# loop through squares
-		for i in range(1,len(board)):
-
-			# if empty
-			if board[i] == 0:
-				# make move
-				board[i] = player
-				# get best possible value of move
-				move_value = minimax(board,0,1)
-				# take move back
-				board[i] = 0
-
-				# set best move
-				if move_value < best_value:
-					best_move = i
-					best_value = move_value
-	"""
 	# set endpoint values
 	if player == 1:
 		best_value = -inf
