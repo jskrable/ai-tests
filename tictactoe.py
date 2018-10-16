@@ -26,11 +26,9 @@ def run(board,player):
 		display(board)
 		# recurse until end
 		run(board,-player)
-	# reset board
-	board = reset()
 
 # minimax function
-def minimax(board,depth,player):
+def minimax(board,depth,player,leafcnt):
 
 	# init leaf counter
 	#nodes = 0
@@ -160,6 +158,36 @@ def display(board):
 	print(show[4:7])
 	print(show[7:10])
 	print()
+
+# function to randomly populate a complete board
+def pop(board,full):
+	# populate board completely
+	if full:
+		for i in range(1,len(board)):
+			if random.randint(1,2) > 1:
+				board[i] = 1
+			else: 
+				board[i] = 0
+		return board
+	# populate a partial board
+	else:
+		for i in range(1,random.randint(1,len(board))):
+			if i%2 == 0:
+				board[i] = 1
+			else: 
+				board[i] = 0
+		return board
+
+# dumb recursive function to play a random open square
+def playRand(board,player):
+
+	# try a random square
+	square = random.randint(1,len(board))
+	# if not empty, try again
+	if board[square] != 0:
+		play(board,player)
+	else:
+		board[square] = player
 
 # function to end game and clear board
 def reset():
