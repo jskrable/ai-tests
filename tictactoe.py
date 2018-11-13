@@ -1,10 +1,13 @@
-# tictactoe.py
-# author: Jack Skrable
-# date: 10/03/2018
-# desc: evaluates positions in a tictactoe game
-
+"""
+ tictactoe.py
+ author: Jack Skrable
+ date: 10/03/2018
+ desc: pits two AI players against each other in a game of tictactoe
+ 	   implemented using minimax algorithm with alpha beta pruning
+"""
 import random
 from math import inf
+import cProfile
 
 # list of win scenarios
 win_conditions = [(1,2,3),(4,5,6),(7,8,9),(1,4,7),
@@ -27,11 +30,8 @@ def run(board,player):
 		# recurse until end
 		run(board,-player)
 
-# minimax function
-def minimax(board,depth,player):
-
-	# init leaf counter
-	#nodes = 0
+# minimax function with pruning
+def minimax(board,depth,player,alpha,beta):
 
 	# catch terminal states
 	if end(board):
@@ -55,59 +55,25 @@ def minimax(board,depth,player):
 			# get best possible value of play using recursion
 			# ALTER THIS TO TAKE DEPTH INTO ACCOUNT
 			# value = value - depth??
-			value = minimax(board,depth+1,-player) - (player*depth)
+			value = minimax(board,depth+1,-player,alpha,beta) - (player*depth)
 			# set best score by player
 			if player == 1:
 				best_score = max(best_score,value)
+				alpha = max(alpha,best_score)
 			else:
 				best_score = min(best_score,value)
+				beta = min(beta,best_score)
 			# take back play
 			board[i] = 0
+			# prune that thing
+			if beta <= alpha:
+					break
 	# return best score possible
 	return best_score
 
 # function that returns best move by player
 def bestMove(board,player):
 
-	"""
-	if player == 1:
-		# init vars
-		best_value = -inf
-
-		# loop through squares
-		for i in range(1,len(board)):
-			# if empty
-			if board[i] == 0:
-				# make move
-				board[i] = player
-				# get best possible value of move
-				move_value = minimax(board,0,-1)
-				# take move back
-				board[i] = 0
-
-				# set best move
-				if move_value > best_value:
-					best_move = i
-					best_value = move_value
-	else:
-		best_value = +inf
-		# loop through squares
-		for i in range(1,len(board)):
-
-			# if empty
-			if board[i] == 0:
-				# make move
-				board[i] = player
-				# get best possible value of move
-				move_value = minimax(board,0,1)
-				# take move back
-				board[i] = 0
-
-				# set best move
-				if move_value < best_value:
-					best_move = i
-					best_value = move_value
-	"""
 	# set endpoint values
 	if player == 1:
 		best_value = -inf
@@ -121,7 +87,7 @@ def bestMove(board,player):
 			# make move
 			board[i] = player
 			# get best possible value of move
-			move_value = minimax(board,0,-player)
+			move_value = minimax(board,0,-player,-inf,+inf)
 			# take move back
 			board[i] = 0
 
@@ -261,4 +227,4 @@ def main():
 	run(board,1)
 
 if __name__ == "__main__":
-	main()
+	cProfile.run('main()')
