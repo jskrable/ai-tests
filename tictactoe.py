@@ -28,7 +28,7 @@ def run(board,player):
 		run(board,-player)
 
 # minimax function
-def minimax(board,depth,player,leafcnt):
+def minimax(board,depth,player):
 
 	# init leaf counter
 	#nodes = 0
