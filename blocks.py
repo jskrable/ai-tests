@@ -1,85 +1,95 @@
-n = 3
-
-table = [[]]*n
-
-# start position of blocks
-start = [['B'],['C','A'],[]]
-
-def clearTop
-
-# check for win conditions
-def goal(table):
-	# winning stack
-	stack = ['A','B','C']
-	# loop thru table check for win
-	for i in range(len(table)):
-		if table[i] == stack:
-			return True
-	# return false if no win stack
-	return False
-
-def precond(table,block,dest):
-	if table[src] 
-
-# perform move of block
-def move(table,src,dest):
-	# insert to new dest stack
-	table[dest].insert(0,table[src][0])
-	# drop from src stack
-	del table[src][0]
-	return table
-
 class Block:
 
-	def __init__(self,id,on):
+	# init block state
+	def __init__(self,id,on,table):
 		self.id = id
 		self.on = on
-
-
-	def clear(self):
-		for i in node:
-			if node[i].on != 'table':
-				node[i].on.clear = False
+		table[id] = self
+		for i in table:
+			if table[i].on != 0:
+				table[i].on.clear = False
 		
 		self.clear = True
 
-	def move(self,dest):
+	# try to move block
+	def move(self,dest,test):
 
+		# simpler if to table
 		if dest == 'table':
-			self.clear()
 			if self.clear:
-				self.on = 'table'
+				if not test:
+					self.on = 0
+				return True
+		# otherwise check clear for both
 		else:
-			self.clear()
-			dest.clear()
 			if self.clear and dest.clear:
-				self.on = dest
-				dest.clear = False
+				if not test:
+					self.on = dest
+					dest.clear = False
 				return True
 			else:
 				return False
 
+class Node():
+	def __init__(self,node):
+		
+		self.a = Block(node['a'].id, lambda x: 0 if node['a'].on == 0 else eval(node['a'].on.id),node)
+		self.b = Block(node['b'].id, lambda x: 0 if node['b'].on == 0 else eval(node['b'].on.id),node)
+		self.c = Block(node['c'].id, lambda x: 0 if node['c'].on == 0 else eval(node['c'].on.id),node)
 
-
-class State:
-
-	def __init__(self,a,b,c):
+		self.node = dict(node)
+		self.node['a'] = self.a
+		self.node['b'] = self.b
+		self.node['c'] = self.c
 		self.goal = False
 		self.subgoal = False
+		self.moves = []
 
-		if a.on == b and b.on == c and c.on == 'table':
+		if node['a'].on == node['b'] and node['b'].on == node['c'] and node['c'].on == 'table':
 			self.goal = True
-		elif a.on == b or b.on == c or c.on == 'table':
+
+		if node['a'].on == node['b'] or node['b'].on == node['c'] or node['c'].on == 'table':
 			self.subgoal = True
-		
 
-class Node:
+		for i in node:
+			self.moves.append((node[i],'table'))
 
-	def __init__(self,depth,state):
-		self.depth = depth
+			for j in node:
+				if i != j:
+					if node[i].move(node[j],True):
+						self.moves.append((node[i],node[j]))
+
+
+def moves(node):
+	moves = []
+	for i in node:
+		moves.append((i,'table'))
+
+		for j in node:
+			if i != j:
+				if node[i].move(node[j],True):
+					moves.append((i,j))
+	return moves
+
+def search(node,depth):
+	if node.goal:
+		return True
+	if depth > 8:
+		print('Depth max exceeded')
+		return False
+	for i,j in node.moves:
+		child_node = Node(node.node)
+		i.move(j,False)
+		if search(child_node,depth+1):
+			print('Puzzle complete')
+			break
+
+board = {}
+a = Block('a',0,board)
+b = Block('b',0,board)
+c = Block('c',a,board)
+start = Node(board)
+search(start,0)
 
 
 
-class Stack:
-
-	def __init__(self,)
